@@ -242,10 +242,4 @@ N.B on the Free-tier only 2 tasks can be scheduled on Python Anywhere.
 Thanks for reading!
 
 
-
 ----
-
-**Table of Contents**
-
-[TOC]
-
