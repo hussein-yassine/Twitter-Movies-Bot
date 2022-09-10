@@ -1,4 +1,4 @@
-# Movies Chooser
+# Movies Twitter Bot
 Your Random Movies Generator Bot is here, and can be implemented and deployed in a matter of minutes!
 
 ## Features
