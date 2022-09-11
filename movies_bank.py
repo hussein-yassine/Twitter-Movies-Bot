@@ -4,7 +4,9 @@ from bot_movie import BotMovie
 from datetime import date
 import random
 import requests
-from credentials import *
+from credentials import TMDB_API_KEY
+
+IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500"
 
 
 def get_random_year():
@@ -22,14 +24,13 @@ def get_genres():
 class MovieBank:
 
     def __init__(self):
-        self.IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500"
         self.tmdb = TMDb()
         self.tmdb.api_key = TMDB_API_KEY
         self.tmdb.language = 'en'
         self.tmdb.debug = True
         self.movie = Movie()
 
-    def __get_movie(self, movie_id):
+    def _get_movie(self, movie_id):
         m = self.movie.details(movie_id)
         genres = [genre['name'] for genre in m.genres]
         bot_movie = BotMovie(
@@ -37,21 +38,21 @@ class MovieBank:
             title=m.title,
             genre="/".join(genres),
             release_date=m.release_date,
-            poster_1=self.IMAGE_BASE_URL + m.poster_path,
-            poster_2=self.IMAGE_BASE_URL + m.backdrop_path,
+            poster_1=IMAGE_BASE_URL + m.poster_path,
+            poster_2=IMAGE_BASE_URL + m.backdrop_path,
             overview=m.overview
         )
         print(bot_movie)
         return bot_movie
 
-    def __get_popular_movies(self):
+    def _get_popular_movies(self):
         popular = self.movie.recommendations(111, page=1)
         bot_movies_ids = []
         for m in popular:
             bot_movies_ids.append(m.id)
         return bot_movies_ids
 
-    def __discover_movies(self):
+    def _discover_movies(self):
         discover = Discover()
         return discover.discover_movies({
             'sort_by': 'popularity.desc',
@@ -64,7 +65,7 @@ class MovieBank:
     # get random movie
     def get_random_movie(self):
         genres_dict = get_genres()
-        movies = self.__discover_movies()
+        movies = self._discover_movies()
         m = random.choice(movies)
         genres_ids = m.genre_ids
         genres = [genres_dict[genre] for genre in genres_ids]
@@ -73,8 +74,8 @@ class MovieBank:
             title=m.title,
             genre="/".join(genres),
             release_date=m.release_date,
-            poster_1=self.IMAGE_BASE_URL + m.poster_path,
-            poster_2=self.IMAGE_BASE_URL + m.backdrop_path,
+            poster_1=IMAGE_BASE_URL + m.poster_path,
+            poster_2=IMAGE_BASE_URL + m.backdrop_path,
             overview=m.overview
         )
         return bot_movie
