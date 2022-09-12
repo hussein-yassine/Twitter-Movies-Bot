@@ -27,7 +27,7 @@ def main():
         else:
             print("Unable to download image")
 
-    def write_media_tweet(movie, tweet_text):
+    def write_media_tweet(movie, tweet_text, reply_text):
         # Upload images and get media_ids
         image_urls = [movie.poster_1]  # , movie.poster_2]
         media_ids = []
@@ -37,14 +37,15 @@ def main():
             os.remove(file_name)
 
         # Tweet with multiple images
-        api.update_status(status=tweet_text.ljust(280)[:280].strip(), media_ids=media_ids)
+        tweet = api.update_status(status=tweet_text.ljust(280)[:280].strip(), media_ids=media_ids)
+        api.update_status(status=reply_text.ljust(280)[:280].strip(), in_reply_to_status_id=tweet.id_str, auto_populate_reply_metadata=True)
 
     def tweet_random_movie():
         movies_bank = MovieBank()
         movie = movies_bank.get_random_movie()
         tweet_text = movie.get_tweet_text()
-        print(tweet_text)
-        write_media_tweet(movie, tweet_text)
+        reply_text = movie.get_reply_text()
+        write_media_tweet(movie, tweet_text, reply_text)
 
     try:
         api.verify_credentials()
