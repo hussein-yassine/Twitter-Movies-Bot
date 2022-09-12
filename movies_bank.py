@@ -74,6 +74,8 @@ class MovieBank:
             title=m.title,
             genre="/".join(genres),
             release_date=m.release_date,
+            rating=m.vote_average,
+            num_of_votes=m.vote_count,
             poster_1=IMAGE_BASE_URL + m.poster_path,
             poster_2=IMAGE_BASE_URL + m.backdrop_path,
             overview=m.overview
